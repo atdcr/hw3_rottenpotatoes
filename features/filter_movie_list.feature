@@ -1,11 +1,11 @@
-Feature: display list of movies filtered by MPAA rating
+Feature: display list of movies sorted by different criteria
  
-  As a concerned parent
-  So that I can quickly browse movies appropriate for my family
-  I want to see movies matching only certain MPAA ratings
+  As an avid moviegoer
+  So that I can quickly browse movies based on my preferences
+  I want to see movies sorted by title or release date
 
 Background: movies have been added to database
-
+  
   Given the following movies exist:
   | title                   | rating | release_date |
   | Aladdin                 | G      | 25-Nov-1992  |
@@ -19,17 +19,21 @@ Background: movies have been added to database
   | Raiders of the Lost Ark | PG     | 12-Jun-1981  |
   | Chicken Run             | G      | 21-Jun-2000  |
 
-  And  I am on the RottenPotatoes home page
-  
+  And I am on the RottenPotatoes home page
+          
 Scenario: restrict to movies with 'PG' or 'R' ratings
-  # enter step(s) to check the 'PG' and 'R' checkboxes
-  # enter step(s) to uncheck all other checkboxes
-  # enter step to "submit" the search form on the homepage
-  # enter step(s) to ensure that PG and R movies are visible
-  # enter step(s) to ensure that other movies are not visible
+  Given I check the following ratings: PG, R
+  And I uncheck the following ratings: G, PG-13
+  When I press "Refresh"
+  Then I should see the following ratings: PG, R
+  And I should not see the following ratings: G, PG-13
 
-Scenario: no ratings selected
-  # see assignment
 
 Scenario: all ratings selected
-  # see assignment
+  Given I am on the RottenPotatoes home page
+  And I check the following ratings: G,PG,PG-13,R
+  When I press "Refresh"
+  Then I should see all of the movies
+
+
+
